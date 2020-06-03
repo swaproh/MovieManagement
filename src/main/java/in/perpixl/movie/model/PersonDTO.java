@@ -1,16 +1,20 @@
-package com.movie.model;
+package in.perpixl.movie.model;
 
-public class Person {
+import java.util.List;
+import java.util.UUID;
+
+public class PersonDTO {
 	
-	private int personId;
+	private Long personId;
 	private String firstName;
 	private String lastName;
 	private String dob;
 	private String country;
-	public int getPersonId() {
+	private List<RoleDTO> roleDTO;
+	public Long getPersonId() {
 		return personId;
 	}
-	public void setPersonId(int personId) {
+	public void setPersonId(Long personId) {
 		this.personId = personId;
 	}
 	public String getFirstName() {
@@ -37,11 +41,18 @@ public class Person {
 	public void setCountry(String country) {
 		this.country = country;
 	}
+	public List<RoleDTO> getRoleDTO() {
+		return roleDTO;
+	}
+	public void setRoleDTO(List<RoleDTO> roleDTO) {
+		this.roleDTO = roleDTO;
+	}
 	@Override
 	public String toString() {
-		return "Person [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob
-				+ ", country=" + country + "]";
+		return "PersonDTO [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", dob="
+				+ dob + ", country=" + country + ", roleDTO=" + roleDTO + "]";
 	}
+	
 	
 	
 

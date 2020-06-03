@@ -1,13 +1,15 @@
-package com.movie.model;
+package in.perpixl.movie.model;
 
-public class Role {
+import java.util.UUID;
+
+public class RoleDTO {
 	
-	private int roleId;
+	private Long roleId;
 	private String roleName;
-	public int getRoleId() {
+	public Long getRoleId() {
 		return roleId;
 	}
-	public void setRoleId(int roleId) {
+	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
 	public String getRoleName() {
