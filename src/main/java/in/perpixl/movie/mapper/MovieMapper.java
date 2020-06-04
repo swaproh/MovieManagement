@@ -1,5 +1,6 @@
 package in.perpixl.movie.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import in.perpixl.movie.Entity.MovieEntity;
 import in.perpixl.movie.Entity.PersonEntity;
 import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.model.PersonDTO;
+import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
 public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
@@ -66,14 +68,24 @@ public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
 
 	@Override
 	public List<MovieDTO> mapEntityListToDTOList(List<MovieEntity> uList) {
-		// TODO Auto-generated method stub
-		return null;
+		List<MovieDTO> movieDTOList = new ArrayList<>();
+		for(MovieEntity mEntity : PerpixlUtils.<MovieEntity>safe(uList))
+		{
+			MovieDTO pDTO = mapEntityToDto(mEntity);
+			movieDTOList.add(pDTO);
+		}
+		return movieDTOList;
 	}
 
 	@Override
-	public List<MovieEntity> mapDTOListToEntityList(List<MovieDTO> tList) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<MovieEntity> mapDTOListToEntityList(List<MovieDTO> MovieDTO) {
+		List<MovieEntity> movieEntityList = new ArrayList<>();
+		for(MovieDTO pDto : PerpixlUtils.<MovieDTO>safe(MovieDTO))
+		{
+			MovieEntity pEntity = mapDtoToEntity(pDto);
+			movieEntityList.add(pEntity);
+		}
+		return movieEntityList;
 	}
 
 }

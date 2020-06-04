@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import in.perpixl.movie.Entity.MovieEntity;
 import in.perpixl.movie.Entity.RoleEntity;
 import in.perpixl.movie.model.RoleDTO;
+import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
 public class RoleMapper implements IMapper<RoleDTO,RoleEntity>{
@@ -43,7 +45,7 @@ public class RoleMapper implements IMapper<RoleDTO,RoleEntity>{
 	@Override
 	public List<RoleDTO> mapEntityListToDTOList(List<RoleEntity> uList) {
 		List<RoleDTO> roleDTOList=new ArrayList<>();
-		for(RoleEntity rEntity:uList)
+		for(RoleEntity rEntity:PerpixlUtils.<RoleEntity>safe(uList))
 		{
 			RoleDTO rDTO= mapEntityToDto(rEntity);
 			roleDTOList.add(rDTO);
@@ -55,7 +57,7 @@ public class RoleMapper implements IMapper<RoleDTO,RoleEntity>{
 	@Override
 	public List<RoleEntity> mapDTOListToEntityList(List<RoleDTO> tList) {
 		List<RoleEntity> roleEntityList=new ArrayList<>();
-		for(RoleDTO rDTO:tList)
+		for(RoleDTO rDTO:PerpixlUtils.<RoleDTO>safe(tList))
 		{
 			RoleEntity rEntity= mapDtoToEntity(rDTO);
 			roleEntityList.add(rEntity);

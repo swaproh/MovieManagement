@@ -24,7 +24,7 @@ public class PersonEntity {
 	private String dob;
 	private String country;
 	@ManyToOne//(cascade=CascadeType.ALL)
-	@JoinColumn(name="movieId", nullable=false)
+	@JoinColumn(name="movieId", nullable=true)
 	private MovieEntity movieEntity;
 	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name="role_like",

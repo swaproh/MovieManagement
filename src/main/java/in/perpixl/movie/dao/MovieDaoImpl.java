@@ -1,8 +1,10 @@
 package in.perpixl.movie.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import in.perpixl.movie.Entity.MovieEntity;
@@ -11,6 +13,7 @@ import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.repository.MovieRepository;
 
 @Component
+@Qualifier("moviedao")
 public class MovieDaoImpl implements IDao<MovieDTO>{
 
 	@Autowired
@@ -20,6 +23,7 @@ public class MovieDaoImpl implements IDao<MovieDTO>{
 	
 	@Override
 	public void create(MovieDTO m) {
+		System.out.println("In MovieDao");
 		MovieEntity entity = mapper.mapDtoToEntity(m);
 		movieRepo.save(entity);
 	}
@@ -33,6 +37,7 @@ public class MovieDaoImpl implements IDao<MovieDTO>{
 
 	@Override
 	public void update(MovieDTO m) {
+		System.out.println("In update dao");
 		Optional<MovieEntity> entity=movieRepo.findById(Long.parseLong(m.getMovieId().toString()));
 		if(entity.isPresent())
 		{
@@ -40,6 +45,7 @@ public class MovieDaoImpl implements IDao<MovieDTO>{
 			mapper.mapDtoToEntity(m, ent);
 			movieRepo.save(ent);
 		}
+		System.out.println("In update dao end");
 	}
 
 	@Override
@@ -52,7 +58,16 @@ public class MovieDaoImpl implements IDao<MovieDTO>{
 	
 			movieRepo.delete(ent);
 		}
+		System.out.println("delete movie dao");
 		return rohit;
+		
+	}
+
+	@Override
+	public List<MovieDTO> readAll() {
+		List<MovieEntity> movieEntityList=movieRepo.findAll();
+		List<MovieDTO> movieDTOList=mapper.mapEntityListToDTOList(movieEntityList);
+		return movieDTOList;
 	}
 
 }

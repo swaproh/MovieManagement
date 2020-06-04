@@ -10,6 +10,7 @@ import in.perpixl.movie.Entity.PersonEntity;
 import in.perpixl.movie.Entity.RoleEntity;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.model.RoleDTO;
+import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
 public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
@@ -59,7 +60,7 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	@Override
 	public List<PersonEntity> mapDTOListToEntityList(List<PersonDTO> tList) {
 		List<PersonEntity> personEntityList = new ArrayList<>();
-		for(PersonDTO pDto : tList)
+		for(PersonDTO pDto : PerpixlUtils.<PersonDTO>safe(tList))
 		{
 			PersonEntity pEntity = mapDtoToEntity(pDto);
 			personEntityList.add(pEntity);
@@ -71,7 +72,7 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	public List<PersonDTO> mapEntityListToDTOList(List<PersonEntity> personEntityList) {
 		
 		List<PersonDTO> personDTOList = new ArrayList<>();
-		for(PersonEntity pEntity : personEntityList)
+		for(PersonEntity pEntity : PerpixlUtils.<PersonEntity>safe(personEntityList))
 		{
 			PersonDTO pDTO = mapEntityToDto(pEntity);
 			personDTOList.add(pDTO);

@@ -12,7 +12,7 @@ public class MovieDTO {
 	private String movieBasedOn;
 	private String productionCompany;
 	private String distributedBy;
-	private String Language;
+	private String language;
 	private Date releaseDate;
 	private Date watchDate;
 	public Long getMovieId() {
@@ -52,10 +52,10 @@ public class MovieDTO {
 		this.distributedBy = distributedBy;
 	}
 	public String getLanguage() {
-		return Language;
+		return language;
 	}
 	public void setLanguage(String language) {
-		Language = language;
+		this.language = language;
 	}
 	public Date getReleaseDate() {
 		return releaseDate;
@@ -73,7 +73,7 @@ public class MovieDTO {
 	public String toString() {
 		return "MovieDTO [movieId=" + movieId + ", movieName=" + movieName + ", personDTO=" + personDTO
 				+ ", movieBasedOn=" + movieBasedOn + ", productionCompany=" + productionCompany + ", distributedBy="
-				+ distributedBy + ", Language=" + Language + ", releaseDate=" + releaseDate + ", watchDate=" + watchDate
+				+ distributedBy + ", language=" + language + ", releaseDate=" + releaseDate + ", watchDate=" + watchDate
 				+ "]";
 	}
 	

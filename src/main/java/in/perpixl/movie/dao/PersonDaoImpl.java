@@ -1,16 +1,21 @@
 package in.perpixl.movie.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import in.perpixl.movie.Entity.MovieEntity;
 import in.perpixl.movie.Entity.PersonEntity;
 import in.perpixl.movie.mapper.PersonMapper;
+import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.repository.PersonRepository;
 
 @Component
+@Qualifier("persondao")
 public class PersonDaoImpl implements IDao<PersonDTO>{
 	
 	@Autowired
@@ -53,6 +58,13 @@ public class PersonDaoImpl implements IDao<PersonDTO>{
 			personRepo.delete(ent);
 		}
 		return rohit;
+	}
+
+	@Override
+	public List<PersonDTO> readAll() {
+		List<PersonEntity> personEntityList=personRepo.findAll();
+		List<PersonDTO> personDTOList=mapper.mapEntityListToDTOList(personEntityList);
+		return personDTOList;
 	}
 
 
