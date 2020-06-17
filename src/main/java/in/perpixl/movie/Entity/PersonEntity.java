@@ -1,7 +1,7 @@
 package in.perpixl.movie.Entity;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class PersonEntity {
@@ -22,15 +22,17 @@ public class PersonEntity {
 	private String firstName;
 	private String lastName;
 	private String dob;
-	private String country;
-	@ManyToOne//(cascade=CascadeType.ALL)
-	@JoinColumn(name="movieId", nullable=true)
-	private MovieEntity movieEntity;
 	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="role_like",
-	joinColumns=@JoinColumn(name="personId"),
-	inverseJoinColumns=@JoinColumn(name="roleId"))
-	private List<RoleEntity> roleEntity;
+	@JoinTable(name="movie_crew",
+	joinColumns= @JoinColumn(name="personId"),
+	inverseJoinColumns= @JoinColumn(name="movieId"))
+	private Set<MovieEntity> movieEntity = new HashSet<MovieEntity>();
+	@ManyToMany(cascade=CascadeType.ALL, mappedBy="personEntityList")
+	private Set<RoleEntity> roleEntity=new HashSet<RoleEntity>();
+	
+	@OneToOne(cascade=CascadeType.ALL)
+	private CountryEntity country;
+	
 	public Long getPersonId() {
 		return personId;
 	}
@@ -55,27 +57,25 @@ public class PersonEntity {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-	public String getCountry() {
+	public CountryEntity getCountry() {
 		return country;
 	}
-	public void setCountry(String country) {
+	public void setCountry(CountryEntity country) {
 		this.country = country;
 	}
-	public List<RoleEntity> getRoleEntity() {
+	public Set<RoleEntity> getRoleEntity() {
 		return roleEntity;
 	}
-	public void setRoleEntity(List<RoleEntity> roleEntity) {
-		this.roleEntity = roleEntity;
-	}
-	public MovieEntity getMovieEntity() {
+	
+	public Set<MovieEntity> getMovieEntity() {
 		return movieEntity;
 	}
-	public void setMovieEntity(MovieEntity movieEntity) {
+
+	public void addRole(RoleEntity re) {
+		this.roleEntity.add(re);
+		re.getPersonEntityList().add(this);
+	}
+	public void setMovieEntity(Set<MovieEntity> movieEntity) {
 		this.movieEntity = movieEntity;
 	}
-	
-	
-	
-	
-
 }

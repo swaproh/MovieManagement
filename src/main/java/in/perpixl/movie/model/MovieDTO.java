@@ -1,18 +1,24 @@
 package in.perpixl.movie.model;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 public class MovieDTO {
 	
 	private Long movieId;
 	private String movieName;
-	private List<PersonDTO> personDTO;
+	private Set<PersonDTO> personDTO;
 	private String movieBasedOn;
-	private String productionCompany;
-	private String distributedBy;
-	private String language;
+	private Set<CompanyDTO> productionCompany;
+	private Set<CompanyDTO> distributedBy;
+	private Set<LanguageDTO> language;
+	private CountryDTO country;
+	public CountryDTO getCountry() {
+		return country;
+	}
+	public void setCountry(CountryDTO country) {
+		this.country = country;
+	}
 	private Date releaseDate;
 	private Date watchDate;
 	public Long getMovieId() {
@@ -27,10 +33,10 @@ public class MovieDTO {
 	public void setMovieName(String movieName) {
 		this.movieName = movieName;
 	}
-	public List<PersonDTO> getPersonDTO() {
+	public Set<PersonDTO> getPersonDTO() {
 		return personDTO;
 	}
-	public void setPersonDTO(List<PersonDTO> personDTO) {
+	public void setPersonDTO(Set<PersonDTO> personDTO) {
 		this.personDTO = personDTO;
 	}
 	public String getMovieBasedOn() {
@@ -39,22 +45,24 @@ public class MovieDTO {
 	public void setMovieBasedOn(String movieBasedOn) {
 		this.movieBasedOn = movieBasedOn;
 	}
-	public String getProductionCompany() {
+	
+	public Set<CompanyDTO> getProductionCompany() {
 		return productionCompany;
 	}
-	public void setProductionCompany(String productionCompany) {
+	public void setProductionCompany(Set<CompanyDTO> productionCompany) {
 		this.productionCompany = productionCompany;
 	}
-	public String getDistributedBy() {
+	public Set<CompanyDTO> getDistributedBy() {
 		return distributedBy;
 	}
-	public void setDistributedBy(String distributedBy) {
+	public void setDistributedBy(Set<CompanyDTO> distributedBy) {
 		this.distributedBy = distributedBy;
 	}
-	public String getLanguage() {
+	
+	public Set<LanguageDTO> getLanguage() {
 		return language;
 	}
-	public void setLanguage(String language) {
+	public void setLanguage(Set<LanguageDTO> language) {
 		this.language = language;
 	}
 	public Date getReleaseDate() {

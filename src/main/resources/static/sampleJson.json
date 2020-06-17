@@ -1,0 +1,39 @@
+
+{
+	"movieId": "12",
+	"movieName": "Don",
+	"personDTO": [
+				{
+					"personId": "12",
+					"firstName": "rohit",
+					"lastName": "muneshwar",
+					"dob": "12/12/2019",
+					"country": {
+									"name": "belgium"
+								},
+					"roles": [
+								{
+									"roleName": "Actor"
+								}
+							]
+					
+				}
+			],
+	"movieBasedOn":"harry potter",
+	"productionCompany":[
+							{
+								"name":"PC"
+							}
+						],
+	"distributedBy":[
+							{
+								"name":"DC"
+							}
+						],
+	"language": [{
+					"name": "hindi"
+				}],
+	"country": {
+					"name": "india"
+				}
+}

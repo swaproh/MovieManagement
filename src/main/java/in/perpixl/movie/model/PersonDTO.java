@@ -1,7 +1,7 @@
 package in.perpixl.movie.model;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
 public class PersonDTO {
 	
@@ -9,8 +9,8 @@ public class PersonDTO {
 	private String firstName;
 	private String lastName;
 	private String dob;
-	private String country;
-	private List<RoleDTO> roleDTO;
+	private CountryDTO country;
+	private Set<RoleDTO> roles;
 	public Long getPersonId() {
 		return personId;
 	}
@@ -35,24 +35,20 @@ public class PersonDTO {
 	public void setDob(String dob) {
 		this.dob = dob;
 	}
-	public String getCountry() {
+	
+	
+	public CountryDTO getCountry() {
 		return country;
 	}
-	public void setCountry(String country) {
+	public void setCountry(CountryDTO country) {
 		this.country = country;
 	}
-	public List<RoleDTO> getRoleDTO() {
-		return roleDTO;
+	public Set<RoleDTO> getRoles() {
+		return roles;
 	}
-	public void setRoleDTO(List<RoleDTO> roleDTO) {
-		this.roleDTO = roleDTO;
+	public void addRole(RoleDTO roles) {
+		this.roles.add(roles);
 	}
-	@Override
-	public String toString() {
-		return "PersonDTO [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", dob="
-				+ dob + ", country=" + country + ", roleDTO=" + roleDTO + "]";
-	}
-	
 	
 	
 

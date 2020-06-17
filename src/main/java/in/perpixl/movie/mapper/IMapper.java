@@ -1,6 +1,6 @@
 package in.perpixl.movie.mapper;
 
-import java.util.List;
+import java.util.Set;
 
 /*
  * T - dto
@@ -12,6 +12,6 @@ public interface IMapper<T, U> {
 	void mapEntityToDto(T t, U u);
 	void mapDtoToEntity(T t, U u);
 	
-	List<T> mapEntityListToDTOList(List<U> uList);
-	List<U> mapDTOListToEntityList(List<T> tList);
+	Set<T> mapEntityListToDTOList(Set<U> uList);
+	Set<U> mapDTOListToEntityList(Set<T> tList);
 }

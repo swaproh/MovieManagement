@@ -1,11 +1,10 @@
 package in.perpixl.movie.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import in.perpixl.movie.Entity.MovieEntity;
 import in.perpixl.movie.Entity.RoleEntity;
 import in.perpixl.movie.model.RoleDTO;
 import in.perpixl.movie.util.PerpixlUtils;
@@ -43,8 +42,8 @@ public class RoleMapper implements IMapper<RoleDTO,RoleEntity>{
 	}
 
 	@Override
-	public List<RoleDTO> mapEntityListToDTOList(List<RoleEntity> uList) {
-		List<RoleDTO> roleDTOList=new ArrayList<>();
+	public Set<RoleDTO> mapEntityListToDTOList(Set<RoleEntity> uList) {
+		Set<RoleDTO> roleDTOList=new HashSet<>();
 		for(RoleEntity rEntity:PerpixlUtils.<RoleEntity>safe(uList))
 		{
 			RoleDTO rDTO= mapEntityToDto(rEntity);
@@ -55,8 +54,8 @@ public class RoleMapper implements IMapper<RoleDTO,RoleEntity>{
 	}
 
 	@Override
-	public List<RoleEntity> mapDTOListToEntityList(List<RoleDTO> tList) {
-		List<RoleEntity> roleEntityList=new ArrayList<>();
+	public Set<RoleEntity> mapDTOListToEntityList(Set<RoleDTO> tList) {
+		Set<RoleEntity> roleEntityList=new HashSet<>();
 		for(RoleDTO rDTO:PerpixlUtils.<RoleDTO>safe(tList))
 		{
 			RoleEntity rEntity= mapDtoToEntity(rDTO);

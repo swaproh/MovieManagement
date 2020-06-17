@@ -1,13 +1,18 @@
 package in.perpixl.movie.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.perpixl.movie.Entity.CompanyEntity;
+import in.perpixl.movie.Entity.CountryEntity;
+import in.perpixl.movie.Entity.LanguageEntity;
 import in.perpixl.movie.Entity.MovieEntity;
 import in.perpixl.movie.Entity.PersonEntity;
+import in.perpixl.movie.model.CompanyDTO;
+import in.perpixl.movie.model.LanguageDTO;
 import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.util.PerpixlUtils;
@@ -17,24 +22,47 @@ public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
 	@Autowired
 	PersonMapper personMapper;
 	
+	@Autowired
+	CompanyMapper companyMapper;
+	
+	@Autowired
+	LanguageMapper languageMapper;
+	
+	@Autowired
+	CountryMapper countryMapper;
+	
 	@Override
 	public void mapDtoToEntity(MovieDTO me, MovieEntity entity)
 	{
-		entity.setDistributedBy(me.getDistributedBy());
-		entity.setLanguage(me.getLanguage());
+		Set<CompanyEntity> distributionCompanies = companyMapper.mapDTOListToEntityList(me.getDistributedBy());
+		for(CompanyEntity cEntity : distributionCompanies) {
+			entity.addDistributedBy(cEntity);
+		}
+		
+		Set<LanguageEntity> languages = languageMapper.mapDTOListToEntityList(me.getLanguage());
+		for(LanguageEntity lEntity: languages) {
+			entity.addLanguage(lEntity);
+		}
 		entity.setMovieBasedOn(me.getMovieBasedOn());
 		entity.setMovieId(me.getMovieId());
 		entity.setMovieName(me.getMovieName());
-		entity.setProductionCompany(me.getProductionCompany());
+		
+		Set<CompanyEntity> productionCompanies = companyMapper.mapDTOListToEntityList(me.getProductionCompany());
+		for(CompanyEntity cEntity : productionCompanies) {
+			entity.addProductionCompany(cEntity);
+		}
 		entity.setReleaseDate(me.getReleaseDate());
 		entity.setWatchDate(me.getWatchDate());
 		
-		List<PersonEntity> pEntityList = personMapper.mapDTOListToEntityList(me.getPersonDTO());
+		Set<PersonEntity> pEntityList = personMapper.mapDTOListToEntityList(me.getPersonDTO());
 		for(PersonEntity pe: pEntityList)
 		{
-			pe.setMovieEntity(entity);
+			entity.addPerson(pe);
 		}
-		entity.setPerson(pEntityList);
+		
+		CountryEntity countryEntity = countryMapper.mapDtoToEntity(me.getCountry());
+		entity.setCountry(countryEntity);
+		
 	}
 
 	@Override
@@ -53,22 +81,29 @@ public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
 
 	@Override
 	public void mapEntityToDto(MovieDTO dto, MovieEntity me) {
-		dto.setDistributedBy(me.getDistributedBy());
-		dto.setLanguage(me.getLanguage());
+		Set<CompanyDTO> cDTOList = companyMapper.mapEntityListToDTOList(me.getDistributedBy());
+		dto.setDistributedBy(cDTOList);
+		
+		Set<LanguageDTO> l =languageMapper.mapEntityListToDTOList(me.getLanguage());
+		dto.setLanguage(l);
+		
 		dto.setMovieBasedOn(me.getMovieBasedOn());
 		dto.setMovieId(me.getMovieId());
 		dto.setMovieName(me.getMovieName());
-		dto.setProductionCompany(me.getProductionCompany());
+		
+		Set<CompanyDTO> prDTOList = companyMapper.mapEntityListToDTOList(me.getProductionCompany());
+		dto.setDistributedBy(prDTOList);
+		
 		dto.setReleaseDate(me.getReleaseDate());
 		dto.setWatchDate(me.getWatchDate());
 		
-		List<PersonDTO> pDTOList = personMapper.mapEntityListToDTOList(me.getPerson());
+		Set<PersonDTO> pDTOList = personMapper.mapEntityListToDTOList(me.getPerson());
 		dto.setPersonDTO(pDTOList);
 	}
 
 	@Override
-	public List<MovieDTO> mapEntityListToDTOList(List<MovieEntity> uList) {
-		List<MovieDTO> movieDTOList = new ArrayList<>();
+	public Set<MovieDTO> mapEntityListToDTOList(Set<MovieEntity> uList) {
+		Set<MovieDTO> movieDTOList = new HashSet<>();
 		for(MovieEntity mEntity : PerpixlUtils.<MovieEntity>safe(uList))
 		{
 			MovieDTO pDTO = mapEntityToDto(mEntity);
@@ -78,8 +113,8 @@ public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
 	}
 
 	@Override
-	public List<MovieEntity> mapDTOListToEntityList(List<MovieDTO> MovieDTO) {
-		List<MovieEntity> movieEntityList = new ArrayList<>();
+	public Set<MovieEntity> mapDTOListToEntityList(Set<MovieDTO> MovieDTO) {
+		Set<MovieEntity> movieEntityList = new HashSet<>();
 		for(MovieDTO pDto : PerpixlUtils.<MovieDTO>safe(MovieDTO))
 		{
 			MovieEntity pEntity = mapDtoToEntity(pDto);

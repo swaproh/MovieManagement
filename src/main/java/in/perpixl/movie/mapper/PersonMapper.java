@@ -1,13 +1,15 @@
 package in.perpixl.movie.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import in.perpixl.movie.Entity.CountryEntity;
 import in.perpixl.movie.Entity.PersonEntity;
 import in.perpixl.movie.Entity.RoleEntity;
+import in.perpixl.movie.model.CountryDTO;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.model.RoleDTO;
 import in.perpixl.movie.util.PerpixlUtils;
@@ -16,6 +18,9 @@ import in.perpixl.movie.util.PerpixlUtils;
 public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	@Autowired
 	RoleMapper roleMapper;
+	
+	@Autowired
+	CountryMapper countryMapper;
 	
 	@Override
 	public PersonDTO mapEntityToDto(PersonEntity u) {
@@ -36,10 +41,13 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 		t.setPersonId(u.getPersonId());
 		t.setFirstName(u.getFirstName());
 		t.setLastName(u.getLastName());
-		t.setCountry(u.getCountry());
+		CountryDTO cDto = countryMapper.mapEntityToDto(u.getCountry());
+		t.setCountry(cDto);
 		t.setDob(u.getDob());
-		List<RoleDTO> rDTO=roleMapper.mapEntityListToDTOList(u.getRoleEntity());
-		t.setRoleDTO(rDTO);
+		Set<RoleDTO> rDTO=roleMapper.mapEntityListToDTOList(u.getRoleEntity());
+		for(RoleDTO rD: rDTO) {
+			t.addRole(rD);
+		}
 		
 	}
 
@@ -48,18 +56,19 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 		u.setPersonId(t.getPersonId());
 		u.setFirstName(t.getFirstName());
 		u.setLastName(t.getLastName());
-		u.setCountry(t.getCountry());
+		CountryEntity cEntity = countryMapper.mapDtoToEntity(t.getCountry());
+		u.setCountry(cEntity);
 		u.setDob(t.getDob());
-		List<RoleEntity> rEntity=roleMapper.mapDTOListToEntityList(t.getRoleDTO());
-		u.setRoleEntity(rEntity);
-		
-	
-		
+		//adjust role DTO
+		Set<RoleEntity> rEntity=roleMapper.mapDTOListToEntityList(t.getRoles());
+		for(RoleEntity re: rEntity) {
+			u.addRole(re);
+		}
 	}
 
 	@Override
-	public List<PersonEntity> mapDTOListToEntityList(List<PersonDTO> tList) {
-		List<PersonEntity> personEntityList = new ArrayList<>();
+	public Set<PersonEntity> mapDTOListToEntityList(Set<PersonDTO> tList) {
+		Set<PersonEntity> personEntityList = new HashSet<>();
 		for(PersonDTO pDto : PerpixlUtils.<PersonDTO>safe(tList))
 		{
 			PersonEntity pEntity = mapDtoToEntity(pDto);
@@ -69,9 +78,9 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	}
 	
 	@Override
-	public List<PersonDTO> mapEntityListToDTOList(List<PersonEntity> personEntityList) {
+	public Set<PersonDTO> mapEntityListToDTOList(Set<PersonEntity> personEntityList) {
 		
-		List<PersonDTO> personDTOList = new ArrayList<>();
+		Set<PersonDTO> personDTOList = new HashSet<>();
 		for(PersonEntity pEntity : PerpixlUtils.<PersonEntity>safe(personEntityList))
 		{
 			PersonDTO pDTO = mapEntityToDto(pEntity);

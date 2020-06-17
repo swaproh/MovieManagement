@@ -1,50 +1,70 @@
 package in.perpixl.movie.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import in.perpixl.movie.dao.IDao;
+import in.perpixl.movie.Entity.RoleEntity;
+import in.perpixl.movie.mapper.RoleMapper;
 import in.perpixl.movie.model.RoleDTO;
+import in.perpixl.movie.repository.RoleRepository;
 
 @Service
 @Qualifier("roleservice")
 public class RoleServiceImpl implements IService<RoleDTO>{
-	
 	@Autowired
-	@Qualifier("roledao")
-	private IDao<RoleDTO> daoI;
+	private RoleRepository roleRepo;
+	@Autowired
+	private RoleMapper mapper;
 	
 	@Override
-	public void create(RoleDTO m)
-	{
-		System.out.println("In service Layer");
-		daoI.create(m);
+	public void create(RoleDTO m) {
+		RoleEntity entity = mapper.mapDtoToEntity(m);
+		roleRepo.save(entity);
 	}
 
 	@Override
 	public RoleDTO read(long roleId) {
-		System.out.println("In service layer");
-		RoleDTO m=daoI.read(roleId);
+		RoleEntity me=roleRepo.findById(roleId).orElseThrow(RuntimeException::new);
+		RoleDTO m=mapper.mapEntityToDto(me);
 		return m;
 	}
 
 	@Override
 	public void update(RoleDTO m) {
-		daoI.update(m);
+		Optional<RoleEntity> entity=roleRepo.findById(Long.parseLong(m.getRoleId().toString()));
+		if(entity.isPresent())
+		{
+			RoleEntity ent = entity.get();
+			mapper.mapDtoToEntity(m, ent);
+			roleRepo.save(ent);
+		}
 	}
 
 	@Override
 	public long delete(long roleId) {
-		long l=daoI.delete(roleId);
-		return l;
+		Optional<RoleEntity> entity=roleRepo.findById(roleId);
+		long rohit=0L;
+		if(entity.isPresent())
+		{
+			RoleEntity ent = entity.get();
+	
+			roleRepo.delete(ent);
+		}
+		return rohit;
 	}
 
 	@Override
 	public List<RoleDTO> readAll() {
-		return daoI.readAll();
+		List<RoleEntity> roleEntityList=roleRepo.findAll();
+		Set<RoleDTO> roleDTOList=mapper.mapEntityListToDTOList(new HashSet<>(roleEntityList));
+		return new ArrayList<>(roleDTOList);
 	}
 
 }

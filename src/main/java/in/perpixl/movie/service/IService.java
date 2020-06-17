@@ -9,6 +9,4 @@ public interface IService<T> {
 	public void update(T m);
 	public long delete(long id);
 	public List<T> readAll();
-	
-
 }
