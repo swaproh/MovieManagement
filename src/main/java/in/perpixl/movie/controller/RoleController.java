@@ -16,18 +16,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.model.RoleDTO;
-import in.perpixl.movie.service.IService;
+import in.perpixl.movie.service.ICRUDService;
 
-@RestController(value="role")
+@RestController
 @RequestMapping("role")
 @CrossOrigin("*")
 public class RoleController {
 	
 	@Autowired
 	@Qualifier("roleservice")
-	private IService<RoleDTO> serviceI;
+	private ICRUDService<RoleDTO> serviceI;
 	
 	ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
 

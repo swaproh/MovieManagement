@@ -1,17 +1,19 @@
 package in.perpixl.movie.mapper;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import in.perpixl.movie.Entity.CountryEntity;
-import in.perpixl.movie.Entity.PersonEntity;
-import in.perpixl.movie.Entity.RoleEntity;
+import in.perpixl.movie.entity.CountryEntity;
+import in.perpixl.movie.entity.PersonEntity;
+import in.perpixl.movie.entity.RoleEntity;
 import in.perpixl.movie.model.CountryDTO;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.model.RoleDTO;
+import in.perpixl.movie.repository.PersonRepository;
 import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
@@ -21,6 +23,9 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	
 	@Autowired
 	CountryMapper countryMapper;
+	
+	@Autowired
+	PersonRepository repo;
 	
 	@Override
 	public PersonDTO mapEntityToDto(PersonEntity u) {
@@ -32,7 +37,16 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 	@Override
 	public PersonEntity mapDtoToEntity(PersonDTO t) {
 		PersonEntity entity=new PersonEntity();
-		mapDtoToEntity(t, entity);
+		// check if language with this id is already present
+		Optional<PersonEntity> personOpt = Optional.empty();
+		if(t.getPersonId()!=null) {
+			personOpt = repo.findById(t.getPersonId());
+		}
+		if(personOpt.isPresent()) {
+			entity = personOpt.get();
+		}else {
+			mapDtoToEntity(t, entity);
+		}
 		return entity;
 	}
 
@@ -44,11 +58,10 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 		CountryDTO cDto = countryMapper.mapEntityToDto(u.getCountry());
 		t.setCountry(cDto);
 		t.setDob(u.getDob());
-		Set<RoleDTO> rDTO=roleMapper.mapEntityListToDTOList(u.getRoleEntity());
-		for(RoleDTO rD: rDTO) {
-			t.addRole(rD);
-		}
-		
+		/*
+		 * Set<RoleDTO> rDTO=roleMapper.mapEntityListToDTOList(u.getRoleEntity());
+		 * for(RoleDTO rD: rDTO) { t.addRole(rD); }
+		 */
 	}
 
 	@Override
@@ -60,10 +73,10 @@ public class PersonMapper implements IMapper<PersonDTO, PersonEntity>{
 		u.setCountry(cEntity);
 		u.setDob(t.getDob());
 		//adjust role DTO
-		Set<RoleEntity> rEntity=roleMapper.mapDTOListToEntityList(t.getRoles());
-		for(RoleEntity re: rEntity) {
-			u.addRole(re);
-		}
+		/*
+		 * Set<RoleEntity> rEntity=roleMapper.mapDTOListToEntityList(t.getRoles());
+		 * for(RoleEntity re: rEntity) { u.addRole(re); }
+		 */
 	}
 
 	@Override

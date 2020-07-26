@@ -1,19 +1,26 @@
 package in.perpixl.movie.mapper;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import in.perpixl.movie.Entity.CompanyEntity;
-import in.perpixl.movie.Entity.RoleEntity;
+import in.perpixl.movie.entity.CompanyEntity;
+import in.perpixl.movie.entity.CountryEntity;
+import in.perpixl.movie.entity.RoleEntity;
 import in.perpixl.movie.model.CompanyDTO;
 import in.perpixl.movie.model.RoleDTO;
+import in.perpixl.movie.repository.CompanyRepository;
 import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
 public class CompanyMapper implements IMapper<CompanyDTO, CompanyEntity> {
 
+	@Autowired
+	CompanyRepository repo;
+	
 	@Override
 	public CompanyDTO mapEntityToDto(CompanyEntity u) {
 		CompanyDTO dto =new CompanyDTO();
@@ -24,7 +31,17 @@ public class CompanyMapper implements IMapper<CompanyDTO, CompanyEntity> {
 	@Override
 	public CompanyEntity mapDtoToEntity(CompanyDTO t) {
 		CompanyEntity entity = new CompanyEntity();
-		mapDtoToEntity(t, entity);
+		
+		// check if company with this id is already present
+		Optional<CompanyEntity> companyOpt = Optional.empty();
+		if(t.getId()!=null) {
+			companyOpt = repo.findById(t.getId());
+		}
+		if(companyOpt.isPresent()) {
+			entity = companyOpt.get();
+		}else {
+			mapDtoToEntity(t, entity);
+		}
 		return entity;
 	}
 

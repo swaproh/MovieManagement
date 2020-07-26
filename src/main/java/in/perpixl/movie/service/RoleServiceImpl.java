@@ -10,14 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import in.perpixl.movie.Entity.RoleEntity;
+import in.perpixl.movie.entity.RoleEntity;
 import in.perpixl.movie.mapper.RoleMapper;
 import in.perpixl.movie.model.RoleDTO;
 import in.perpixl.movie.repository.RoleRepository;
 
 @Service
 @Qualifier("roleservice")
-public class RoleServiceImpl implements IService<RoleDTO>{
+public class RoleServiceImpl implements ICRUDService<RoleDTO>{
 	@Autowired
 	private RoleRepository roleRepo;
 	@Autowired

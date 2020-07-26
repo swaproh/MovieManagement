@@ -1,17 +1,19 @@
 package in.perpixl.movie.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MovieDTO {
 	
 	private Long movieId;
 	private String movieName;
-	private Set<PersonDTO> personDTO;
+	private Set<PersonDTO> personDTO = new HashSet<>();
 	private String movieBasedOn;
-	private Set<CompanyDTO> productionCompany;
-	private Set<CompanyDTO> distributedBy;
-	private Set<LanguageDTO> language;
+	
+	private Set<CompanyDTO> productionCompany = new HashSet<>();
+	private Set<CompanyDTO> distributedBy = new HashSet<>();
+	private Set<LanguageDTO> language = new HashSet<>();
 	private CountryDTO country;
 	public CountryDTO getCountry() {
 		return country;

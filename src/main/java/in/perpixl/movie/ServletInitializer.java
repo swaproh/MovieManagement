@@ -2,6 +2,7 @@ package in.perpixl.movie;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 public class ServletInitializer extends SpringBootServletInitializer {
 

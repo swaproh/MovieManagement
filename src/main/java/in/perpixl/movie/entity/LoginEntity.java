@@ -1,4 +1,4 @@
-package in.perpixl.movie.Entity;
+package in.perpixl.movie.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

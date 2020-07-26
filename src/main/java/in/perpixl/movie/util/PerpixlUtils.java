@@ -12,4 +12,14 @@ public class PerpixlUtils {
 	public static <T> Set<T> safe( Set<T> other ) {
 	    return other == null ? Collections.EMPTY_SET : other;
 	}
+	
+	public static <T> boolean isNullObject(T object)
+	{
+		return object == null;
+	}
+	
+	public static <T> boolean isNotNullObject(T object)
+	{
+		return !isNullObject(object);
+	}
 }

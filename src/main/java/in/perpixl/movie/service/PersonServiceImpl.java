@@ -6,25 +6,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import in.perpixl.movie.Entity.PersonEntity;
+import in.perpixl.movie.entity.PersonEntity;
 import in.perpixl.movie.mapper.PersonMapper;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.repository.PersonRepository;
 
 @Service
 @Qualifier("personservice")
-public class PersonServiceImpl implements IService<PersonDTO>{
+public class PersonServiceImpl implements ICRUDService<PersonDTO>{
 	
 	@Autowired
 	private PersonRepository personRepo;
 	@Autowired
 	private PersonMapper mapper;
 	
+	
 	@Override
+	@Transactional
 	public void create(PersonDTO m) {
 		PersonEntity entity = mapper.mapDtoToEntity(m);
 		personRepo.save(entity);

@@ -1,19 +1,23 @@
 package in.perpixl.movie.mapper;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import in.perpixl.movie.Entity.CompanyEntity;
-import in.perpixl.movie.Entity.CountryEntity;
-import in.perpixl.movie.model.CompanyDTO;
+import in.perpixl.movie.entity.CountryEntity;
 import in.perpixl.movie.model.CountryDTO;
+import in.perpixl.movie.repository.CountryRepository;
 import in.perpixl.movie.util.PerpixlUtils;
 
 @Component
 public class CountryMapper implements IMapper<CountryDTO, CountryEntity> {
 
+	@Autowired
+	CountryRepository repo;
+	
 	@Override
 	public CountryDTO mapEntityToDto(CountryEntity u) {
 		CountryDTO cDto = new CountryDTO();
@@ -24,7 +28,18 @@ public class CountryMapper implements IMapper<CountryDTO, CountryEntity> {
 	@Override
 	public CountryEntity mapDtoToEntity(CountryDTO t) {
 		CountryEntity entity = new CountryEntity();
-		mapDtoToEntity(t, entity);
+		
+		// check if country with this id is already present
+		Optional<CountryEntity> countryOpt = Optional.empty();
+		if(t.getId()!=null) {
+			countryOpt = repo.findById(t.getId());
+		}
+		if(countryOpt.isPresent()) {
+			entity = countryOpt.get();
+		}else {
+			mapDtoToEntity(t, entity);
+		}
+		
 		return entity;
 	}
 

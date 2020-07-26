@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import in.perpixl.movie.model.MovieDTO;
-import in.perpixl.movie.service.IService;
+import in.perpixl.movie.service.ICRUDService;
 
 @RestController(value="movie")
 @RequestMapping("movie")
@@ -29,7 +29,7 @@ public class MovieController {
 
 	@Autowired
 	@Qualifier("movieservice")
-	private IService<MovieDTO> serviceI;
+	private ICRUDService<MovieDTO> serviceI;
 	
 	private static final Logger LOGGER=LogManager.getLogger(MovieController.class);
 	

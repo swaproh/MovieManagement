@@ -2,7 +2,7 @@ package in.perpixl.movie.mapper;
 
 import java.util.Set;
 
-import in.perpixl.movie.Entity.LoginEntity;
+import in.perpixl.movie.entity.LoginEntity;
 import in.perpixl.movie.model.LoginDTO;
 
 public class LoginMapper implements IMapper<LoginDTO, LoginEntity>{

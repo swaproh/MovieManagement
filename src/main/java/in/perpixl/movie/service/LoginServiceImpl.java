@@ -3,7 +3,7 @@ package in.perpixl.movie.service;
 import java.util.List;
 
 
-public class LoginServiceImpl<T> implements IService<T>{
+public class LoginServiceImpl<T> implements ICRUDService<T>{
 
 	@Override
 	public void create(T m) {

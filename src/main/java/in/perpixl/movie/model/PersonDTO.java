@@ -10,7 +10,7 @@ public class PersonDTO {
 	private String lastName;
 	private String dob;
 	private CountryDTO country;
-	private Set<RoleDTO> roles;
+	private Set<RoleDTO> roles=new HashSet<>();
 	public Long getPersonId() {
 		return personId;
 	}
@@ -48,6 +48,11 @@ public class PersonDTO {
 	}
 	public void addRole(RoleDTO roles) {
 		this.roles.add(roles);
+	}
+	@Override
+	public String toString() {
+		return "PersonDTO [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", dob="
+				+ dob + ", country=" + country + ", roles=" + roles + "]";
 	}
 	
 	

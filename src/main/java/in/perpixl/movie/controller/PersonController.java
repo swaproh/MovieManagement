@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.model.PersonDTO;
-import in.perpixl.movie.service.IService;
+import in.perpixl.movie.service.ICRUDService;
 
 @RestController(value="person")
 @RequestMapping("person")
@@ -27,7 +27,7 @@ public class PersonController {
 	
 	@Autowired
 	@Qualifier("personservice")
-	private IService<PersonDTO> serviceI;
+	private ICRUDService<PersonDTO> serviceI;
 	
 	ResponseEntity<String> response = new ResponseEntity<String>(HttpStatus.OK);
 
