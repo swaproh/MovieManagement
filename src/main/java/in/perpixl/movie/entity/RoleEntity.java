@@ -29,6 +29,9 @@ public class RoleEntity {
 	@OneToMany(mappedBy="role", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<MoviePersonRoleLinkEntity> mprLink=new HashSet<>();
 	
+	@OneToMany(mappedBy="role", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<SongPersonRoleLinkEntity> sprLink=new HashSet<>();
+	
 	public Long getRoleId() {
 		return roleId;
 	}
@@ -94,5 +97,33 @@ public class RoleEntity {
 		
 		// remove myself from link
 		moviePersonRoleLinkEntity.setRole(null);
+	}
+	
+	public Set<SongPersonRoleLinkEntity> getSprLink() {
+		return sprLink;
+	}
+	
+	public void addSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+		// prevent endless loop
+		if(this.sprLink.contains(songPersonRoleLinkEntity)) {
+			return;
+		}
+		// add to existing
+		this.sprLink.add(songPersonRoleLinkEntity);
+		
+		// add myself to link
+		songPersonRoleLinkEntity.setRole(this);
+	}
+	
+	public void removeSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+		// prevent endless loop
+		if(!this.sprLink.contains(songPersonRoleLinkEntity)) {
+			return;
+		}
+		// remove from existing
+		this.sprLink.remove(songPersonRoleLinkEntity);
+		
+		// remove myself from link
+		songPersonRoleLinkEntity.setRole(null);
 	}
 }

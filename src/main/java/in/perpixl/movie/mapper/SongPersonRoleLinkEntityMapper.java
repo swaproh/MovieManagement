@@ -7,7 +7,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import in.perpixl.movie.entity.MoviePersonRoleLinkEntity;
 import in.perpixl.movie.entity.PersonEntity;
 import in.perpixl.movie.entity.RoleEntity;
 import in.perpixl.movie.entity.SongEntity;
@@ -30,19 +29,7 @@ public class SongPersonRoleLinkEntityMapper {
 	@Autowired
 	RoleRepository roleRepo;
 	
-	public Set<SongPersonRoleLinkEntity> linkSongPersonRoleEntityToDTO(SongEntity me)
-	{
-		Set<SongPersonRoleLinkEntity> mprLinkSet = new HashSet<>();
-		/*
-		 * Set<PersonEntity> peSet = me.getPerson(); for(PersonEntity pe: peSet) {
-		 * MoviePersonRoleLinkEntity link = new MoviePersonRoleLinkEntity();
-		 * link.setMovie(me); link.setPerson(pe); for(RoleEntity re: pe.getRoleEntity())
-		 * { link.setRole(re); } }
-		 */
-		
-		return mprLinkSet;
-	}
-	
+	// add links to this entity
 	public Set<SongPersonRoleLinkEntity> linkSongPersonRoleDTOToEntity(SongDTO me, SongEntity entity)
 	{
 		Set<SongPersonRoleLinkEntity> mprLinkSet = new HashSet<>();

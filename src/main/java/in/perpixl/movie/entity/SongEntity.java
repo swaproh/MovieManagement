@@ -1,6 +1,7 @@
 package in.perpixl.movie.entity;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -28,7 +29,7 @@ public class SongEntity {
 	private Set<PersonEntity> personDTO=new HashSet<>();
 	
 	@OneToMany(mappedBy="song", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<SongPersonRoleLinkEntity> mprLink=new HashSet<>();
+	private Set<SongPersonRoleLinkEntity> sprLink=new HashSet<>();
 	
 	@ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH})
 	private RaagEntity raag;
@@ -136,29 +137,29 @@ public class SongEntity {
 			return false;
 		return true;
 	}
-	public Set<SongPersonRoleLinkEntity> getMprLink() {
-		return mprLink;
+	public Set<SongPersonRoleLinkEntity> getSprLink() {
+		return sprLink;
 	}
 	
-	public void addMprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+	public void addSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
 		// prevent endless loop
-		if(this.mprLink.contains(songPersonRoleLinkEntity)) {
+		if(this.sprLink.contains(songPersonRoleLinkEntity)) {
 			return;
 		}
 		// add to existing
-		this.mprLink.add(songPersonRoleLinkEntity);
+		this.sprLink.add(songPersonRoleLinkEntity);
 		
 		// add myself to link
 		songPersonRoleLinkEntity.setSong(this);
 	}
 	
-	public void removeMprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+	public void removeSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
 		// prevent endless loop
-		if(!this.mprLink.contains(songPersonRoleLinkEntity)) {
+		if(!this.sprLink.contains(songPersonRoleLinkEntity)) {
 			return;
 		}
 		// remove from existing
-		this.mprLink.remove(songPersonRoleLinkEntity);
+		this.sprLink.remove(songPersonRoleLinkEntity);
 		
 		// remove myself from link
 		songPersonRoleLinkEntity.setSong(null);

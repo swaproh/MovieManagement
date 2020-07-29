@@ -11,8 +11,8 @@ import in.perpixl.movie.entity.CompanyEntity;
 import in.perpixl.movie.entity.CountryEntity;
 import in.perpixl.movie.entity.LanguageEntity;
 import in.perpixl.movie.entity.MovieEntity;
-import in.perpixl.movie.entity.MoviePersonRoleLinkEntity;
 import in.perpixl.movie.model.CompanyDTO;
+import in.perpixl.movie.model.CountryDTO;
 import in.perpixl.movie.model.LanguageDTO;
 import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.repository.MovieRepository;
@@ -115,7 +115,10 @@ public class MovieMapper implements IMapper<MovieDTO, MovieEntity>{
 		dto.setMovieName(me.getMovieName());
 		
 		Set<CompanyDTO> prDTOList = companyMapper.mapEntityListToDTOList(me.getProductionCompany());
-		dto.setDistributedBy(prDTOList);
+		dto.setProductionCompany(prDTOList);
+		
+		CountryDTO country = countryMapper.mapEntityToDto(me.getCountry());
+		dto.setCountry(country);
 		
 		dto.setReleaseDate(me.getReleaseDate());
 		dto.setWatchDate(me.getWatchDate());

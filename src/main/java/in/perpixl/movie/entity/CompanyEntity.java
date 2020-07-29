@@ -18,10 +18,10 @@ public class CompanyEntity {
 	private Long id;
 	private String name;
 	
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="productionCompany")
+	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH}, mappedBy="productionCompany")
 	private Set<MovieEntity> movieEntityProd = new HashSet<>();
 	
-	@ManyToMany(cascade=CascadeType.ALL, mappedBy="distributedBy")
+	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH}, mappedBy="distributedBy")
 	private Set<MovieEntity> movieEntityDist = new HashSet<>();
 	
 	public Set<MovieEntity> getMovieEntityProd() {

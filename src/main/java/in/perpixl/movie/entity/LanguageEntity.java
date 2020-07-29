@@ -26,7 +26,7 @@ public class LanguageEntity {
 	 * HashSet<>();
 	 */
 	
-	@ManyToMany(cascade=CascadeType.ALL,mappedBy="language")
+	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH},mappedBy="language")
 	private Set<MovieEntity> movieEntityForLanguages = new HashSet<>();
 	public Set<MovieEntity> getMovieEntityForLanguages() {
 		return new HashSet<>(movieEntityForLanguages);

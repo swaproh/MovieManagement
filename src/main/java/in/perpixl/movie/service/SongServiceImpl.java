@@ -18,7 +18,6 @@ import in.perpixl.movie.entity.SongPersonRoleLinkEntity;
 import in.perpixl.movie.mapper.PersonMapper;
 import in.perpixl.movie.mapper.RoleMapper;
 import in.perpixl.movie.mapper.SongMapper;
-import in.perpixl.movie.mapper.SongPersonRoleLinkEntityMapper;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.model.RoleDTO;
 import in.perpixl.movie.model.SongDTO;
@@ -35,19 +34,16 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 	private PersonMapper personMapper;
 	@Autowired
 	private RoleMapper roleMapper;
+	
 	@Autowired
-	private SongPersonRoleLinkEntityMapper mprLinkMapper;
+	private SongPersonRoleLinkServiceImpl sprLinkServiceImpl;
 	
 	@Transactional
 	@Override
 	public void create(SongDTO m) {
 		SongEntity entity = mapper.mapDtoToEntity(m);
-		
 		// link movie person role
-		Set<SongPersonRoleLinkEntity> linkEntity = mprLinkMapper.linkSongPersonRoleDTOToEntity(m,entity);
-		for(SongPersonRoleLinkEntity link: linkEntity) {
-			entity.addMprLink(link);
-		}
+		sprLinkServiceImpl.addSPRLinkEntityList(m,entity);
 		songRepo.save(entity);
 	}
 
@@ -57,7 +53,7 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 		SongDTO m=mapper.mapEntityToDto(me);
 		
 		// set links
-		Set<SongPersonRoleLinkEntity> mprLinks = me.getMprLink();
+		Set<SongPersonRoleLinkEntity> mprLinks = me.getSprLink();
 		Set<PersonDTO> personDTOSet = new HashSet<>();
 		for(SongPersonRoleLinkEntity link: mprLinks)
 		{
@@ -71,14 +67,17 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 		return m;
 	}
 
+	@Transactional
 	@Override
 	public void update(SongDTO m) {
-		Optional<SongEntity> entity=songRepo.findById(Long.parseLong(m.getId().toString()));
-		if(entity.isPresent())
+		Optional<SongEntity> entityOpt=songRepo.findById(Long.parseLong(m.getId().toString()));
+		if(entityOpt.isPresent())
 		{
-			SongEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			songRepo.save(ent);
+			SongEntity entity = entityOpt.get();
+			// link song person role
+			sprLinkServiceImpl.addSPRLinkEntityList(m,entity);
+			mapper.mapDtoToEntity(m, entity);
+			songRepo.save(entity);
 		}
 	}
 
@@ -89,7 +88,6 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 		if(entity.isPresent())
 		{
 			SongEntity ent = entity.get();
-	
 			songRepo.delete(ent);
 		}
 		return rohit;

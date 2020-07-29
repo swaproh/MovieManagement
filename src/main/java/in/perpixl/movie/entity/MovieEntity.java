@@ -32,24 +32,24 @@ public class MovieEntity {
 	 * HashSet<>();
 	 */
 	
-	@OneToMany(mappedBy="movie", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy="movie", cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.REMOVE})
 	private Set<MoviePersonRoleLinkEntity> mprLink=new HashSet<>();
 	
 	private String movieBasedOn;
 	
-	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToMany
 	@JoinTable(name="movie_prod_company",
 	joinColumns= @JoinColumn(name="Movie_Id", referencedColumnName="movieId"),
 	inverseJoinColumns= @JoinColumn(name="Prod_Company_Id", referencedColumnName="id"))
 	private Set<CompanyEntity> productionCompany=new HashSet<CompanyEntity>();
 	
-	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToMany
 	@JoinTable(name="movie_dist_company",
 	joinColumns= @JoinColumn(name="Movie_Id", referencedColumnName="movieId"),
 	inverseJoinColumns= @JoinColumn(name="Dist_Company_Id", referencedColumnName="id"))
 	private Set<CompanyEntity> distributedBy=new HashSet<CompanyEntity>();
 	
-	@ManyToMany(cascade= {CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToMany
 	@JoinTable(name="movie_language",
 	joinColumns= @JoinColumn(name="Movie_Id", referencedColumnName="movieId"),
 	inverseJoinColumns= @JoinColumn(name="Language_Id", referencedColumnName="id"))
@@ -194,7 +194,7 @@ public class MovieEntity {
 	
 	
 	public Set<SongEntity> getSongs() {
-		return songs;
+		return new HashSet<>(songs);
 	}
 	public void addSong(SongEntity song) {
 		// prevent endless loop

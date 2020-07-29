@@ -29,19 +29,6 @@ public class MoviePersonRoleLinkEntityMapper {
 	@Autowired
 	RoleRepository roleRepo;
 	
-	public Set<MoviePersonRoleLinkEntity> linkMoviePersonRoleEntityToDTO(MovieEntity me)
-	{
-		Set<MoviePersonRoleLinkEntity> mprLinkSet = new HashSet<>();
-		/*
-		 * Set<PersonEntity> peSet = me.getPerson(); for(PersonEntity pe: peSet) {
-		 * MoviePersonRoleLinkEntity link = new MoviePersonRoleLinkEntity();
-		 * link.setMovie(me); link.setPerson(pe); for(RoleEntity re: pe.getRoleEntity())
-		 * { link.setRole(re); } }
-		 */
-		
-		return mprLinkSet;
-	}
-	
 	public Set<MoviePersonRoleLinkEntity> linkMoviePersonRoleDTOToEntity(MovieDTO me, MovieEntity entity)
 	{
 		Set<MoviePersonRoleLinkEntity> mprLinkSet = new HashSet<>();
@@ -53,6 +40,8 @@ public class MoviePersonRoleLinkEntityMapper {
 			 link.setMovie(entity);
 			 
 			 Long personID = pd.getPersonId();
+			 if(personID!=null)
+			 {
 			 Optional<PersonEntity> peOpt = personRepo.findById(personID);
 			 if(peOpt.isPresent())
 			 {
@@ -71,6 +60,7 @@ public class MoviePersonRoleLinkEntityMapper {
 					 RoleEntity re = reOpt.get();
 					 link.setRole(re);
 				 }
+			 }
 			 }
 			 mprLinkSet.add(link);
 		}

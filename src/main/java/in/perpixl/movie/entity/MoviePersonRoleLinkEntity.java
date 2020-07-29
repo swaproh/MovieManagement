@@ -63,7 +63,23 @@ public class MoviePersonRoleLinkEntity
 	}
 
 	public void setPerson(PersonEntity person) {
+		// prevent infinite loop
+		if(this.person==null ? person==null : this.person.equals(person)) {
+			return;
+		}
+		
+		// set new movie keeping old as a backup
+		PersonEntity oldPerson = this.person;
 		this.person = person;
+
+		// remove old reference
+		if(oldPerson!=null) {
+			oldPerson.removeMprLink(this);
+		}
+		
+		if(person!=null) {
+			person.addMprLink(this);
+		}
 	}
 
 	public RoleEntity getRole() {
@@ -71,8 +87,47 @@ public class MoviePersonRoleLinkEntity
 	}
 
 	public void setRole(RoleEntity role) {
+		// prevent infinite loop
+		if(this.role==null ? role==null : this.role.equals(role)) {
+			return;
+		}
+		
+		// set new movie keeping old as a backup
+		RoleEntity oldRole = this.role;
 		this.role = role;
+
+		// remove old reference
+		if(oldRole!=null) {
+			oldRole.removeMprLink(this);
+		}
+		
+		if(role!=null) {
+			role.addMprLink(this);
+		}
 	}
-	
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MoviePersonRoleLinkEntity other = (MoviePersonRoleLinkEntity) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 }

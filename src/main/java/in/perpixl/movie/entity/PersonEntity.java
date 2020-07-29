@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -35,6 +33,9 @@ public class PersonEntity {
 	@OneToMany(mappedBy = "person", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private Set<MoviePersonRoleLinkEntity> mprLink = new HashSet<>();
 
+	@OneToMany(mappedBy="person", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Set<SongPersonRoleLinkEntity> sprLink=new HashSet<>();
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	private CountryEntity country;
 
@@ -116,7 +117,7 @@ public class PersonEntity {
 	 * movieEntity; }
 	 */
 	public Set<SongEntity> getSongs() {
-		return songs;
+		return new HashSet<>(songs);
 	}
 
 	public void addSong(SongEntity song) {
@@ -158,7 +159,7 @@ public class PersonEntity {
 	}
 
 	public Set<MoviePersonRoleLinkEntity> getMprLink() {
-		return mprLink;
+		return new HashSet<>(mprLink);
 	}
 
 	public void addMprLink(MoviePersonRoleLinkEntity moviePersonRoleLinkEntity) {
@@ -183,5 +184,33 @@ public class PersonEntity {
 
 		// remove myself from link
 		moviePersonRoleLinkEntity.setPerson(null);
+	}
+	
+	public Set<SongPersonRoleLinkEntity> getSprLink() {
+		return new HashSet<>(sprLink);
+	}
+	
+	public void addSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+		// prevent endless loop
+		if(this.sprLink.contains(songPersonRoleLinkEntity)) {
+			return;
+		}
+		// add to existing
+		this.sprLink.add(songPersonRoleLinkEntity);
+		
+		// add myself to link
+		songPersonRoleLinkEntity.setPerson(this);
+	}
+	
+	public void removeSprLink(SongPersonRoleLinkEntity songPersonRoleLinkEntity) {
+		// prevent endless loop
+		if(!this.sprLink.contains(songPersonRoleLinkEntity)) {
+			return;
+		}
+		// remove from existing
+		this.sprLink.remove(songPersonRoleLinkEntity);
+		
+		// remove myself from link
+		songPersonRoleLinkEntity.setPerson(null);
 	}
 }
