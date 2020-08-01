@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface ICRUDService<T> {
 
-	public void create(T m);
-	public T read(long id);
+	public Long create(T m);
+	public T read(Long id);
 	public void update(T m);
-	public long delete(long id);
+	public void delete(Long id);
 	public List<T> readAll();
 }

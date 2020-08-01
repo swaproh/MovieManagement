@@ -60,9 +60,8 @@ public class SongController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long songId) {
-		long l = serviceI.delete(songId);
-		return l;
+	public void delete(@PathVariable(name="id") Long songId) {
+		serviceI.delete(songId);
 	}
 
 }

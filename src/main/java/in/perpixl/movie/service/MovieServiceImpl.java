@@ -3,15 +3,16 @@ package in.perpixl.movie.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.MovieEntity;
 import in.perpixl.movie.entity.MoviePersonRoleLinkEntity;
 import in.perpixl.movie.entity.PersonEntity;
@@ -48,21 +49,19 @@ public class MovieServiceImpl implements ICRUDService<MovieDTO>{
 	
 	@Transactional
 	@Override
-	public void create(MovieDTO m) {
-		System.out.println("In MovieDao");
+	public Long create(MovieDTO m) {
 		MovieEntity entity = mapper.mapDtoToEntity(m);
 		// link movie person role
 		mprLinkServiceImpl.addMPRLinkEntityList(m,entity);
-		
-		movieRepo.save(entity);
+		MovieEntity savedEntity = movieRepo.save(entity);
+		return savedEntity.getMovieId();
 	}
 
 	@Override
-	public MovieDTO read(long movieId) {
-		MovieEntity me=movieRepo.findById(movieId).orElseThrow(RuntimeException::new);
+	public MovieDTO read(Long id) {
+		MovieEntity me=movieRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
 		MovieDTO m=mapper.mapEntityToDto(me);
-		
-
 		// set links
 		Set<MoviePersonRoleLinkEntity> mprLinks = me.getMprLink();
 		Set<PersonDTO> personDTOSet = new HashSet<>();
@@ -85,53 +84,36 @@ public class MovieServiceImpl implements ICRUDService<MovieDTO>{
 	@Override
 	public void update(MovieDTO m) {
 		System.out.println("In update dao");
-		Optional<MovieEntity> entityOpt=movieRepo.findById(Long.parseLong(m.getMovieId().toString()));
-		if(entityOpt.isPresent())
-		{
-			MovieEntity entity = entityOpt.get();
-			// link movie person role
-			mprLinkServiceImpl.addMPRLinkEntityList(m,entity);
-			// clear existing company
-			movieServiceImplEx.removeExistingCompanyList(entity);
-			// clear existing languages
-			movieServiceImplEx.removeExistingLanguageList(entity);
-			mapper.mapDtoToEntity(m, entity);
-			movieRepo.save(entity);
-		}else
-		{
-			System.out.println("No entity found with id "+m.getMovieId());
-		}
-		System.out.println("In update dao end");
+		MovieEntity entity=movieRepo.findById(m.getMovieId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getMovieId())));
+		// link movie person role
+		mprLinkServiceImpl.addMPRLinkEntityList(m,entity);
+		// clear existing company
+		movieServiceImplEx.removeExistingCompanyList(entity);
+		// clear existing languages
+		movieServiceImplEx.removeExistingLanguageList(entity);
+		mapper.mapDtoToEntity(m, entity);
+		movieRepo.save(entity);
 	}
 
 	@Transactional
 	@Override
-	public long delete(long movieId) {
-		Optional<MovieEntity> entity=movieRepo.findById(movieId);
-		long rohit=0L;
-		if(entity.isPresent())
+	public void delete(Long id) {
+		MovieEntity entity=movieRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		System.out.println("Finding songs associated with movie "+entity.getMovieName());
+		Set<SongEntity> songs = entity.getSongs();
+		for(SongEntity song: songs) 
 		{
-			MovieEntity ent = entity.get();
-			System.out.println("Finding songs associated with movie "+ent.getMovieName());
-			Set<SongEntity> songs = ent.getSongs();
-			for(SongEntity song: songs) 
-			{
-				// remove movie reference from song
-				song.setMovie(null);
-			}
-			//manage links
-			/*
-			 * Set<MoviePersonRoleLinkEntity> links = ent.getMprLink();
-			 * for(MoviePersonRoleLinkEntity link : links) { link.setMovie(null); }
-			 */
-			movieRepo.delete(ent);
-		}else
-		{
-			System.out.println("No entity found with id "+movieId);
+			// remove movie reference from song
+			song.setMovie(null);
 		}
-		System.out.println("delete movie dao");
-		return rohit;
-		
+		//manage links
+		/*
+		 * Set<MoviePersonRoleLinkEntity> links = ent.getMprLink();
+		 * for(MoviePersonRoleLinkEntity link : links) { link.setMovie(null); }
+		 */
+		movieRepo.delete(entity);
 	}
 
 	@Override

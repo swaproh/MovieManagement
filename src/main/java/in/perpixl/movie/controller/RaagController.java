@@ -66,9 +66,8 @@ public class RaagController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long raagId) {
-		long l = serviceI.delete(raagId);
-		return l;
+	public void delete(@PathVariable(name="id") Long raagId) {
+		serviceI.delete(raagId);
 	}
 	
 	@GetMapping("/thaat/readAll")

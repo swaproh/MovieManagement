@@ -3,15 +3,16 @@ package in.perpixl.movie.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.PersonEntity;
 import in.perpixl.movie.entity.SongEntity;
 import in.perpixl.movie.entity.SongPersonRoleLinkEntity;
@@ -40,16 +41,18 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 	
 	@Transactional
 	@Override
-	public void create(SongDTO m) {
+	public Long create(SongDTO m) {
 		SongEntity entity = mapper.mapDtoToEntity(m);
 		// link movie person role
 		sprLinkServiceImpl.addSPRLinkEntityList(m,entity);
-		songRepo.save(entity);
+		SongEntity savedEntity = songRepo.save(entity);
+		return savedEntity.getId();
 	}
 
 	@Override
-	public SongDTO read(long roleId) {
-		SongEntity me=songRepo.findById(roleId).orElseThrow(RuntimeException::new);
+	public SongDTO read(Long id) {
+		SongEntity me=songRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
 		SongDTO m=mapper.mapEntityToDto(me);
 		
 		// set links
@@ -70,27 +73,19 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 	@Transactional
 	@Override
 	public void update(SongDTO m) {
-		Optional<SongEntity> entityOpt=songRepo.findById(Long.parseLong(m.getId().toString()));
-		if(entityOpt.isPresent())
-		{
-			SongEntity entity = entityOpt.get();
-			// link song person role
-			sprLinkServiceImpl.addSPRLinkEntityList(m,entity);
-			mapper.mapDtoToEntity(m, entity);
-			songRepo.save(entity);
-		}
+		SongEntity entity=songRepo.findById(m.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getId())));
+		// link song person role
+		sprLinkServiceImpl.addSPRLinkEntityList(m,entity);
+		mapper.mapDtoToEntity(m, entity);
+		songRepo.save(entity);
 	}
 
 	@Override
-	public long delete(long roleId) {
-		Optional<SongEntity> entity=songRepo.findById(roleId);
-		long rohit=0L;
-		if(entity.isPresent())
-		{
-			SongEntity ent = entity.get();
-			songRepo.delete(ent);
-		}
-		return rohit;
+	public void delete(Long id) {
+		SongEntity entity=songRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		songRepo.delete(entity);
 	}
 
 	@Override

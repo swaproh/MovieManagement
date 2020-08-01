@@ -3,15 +3,16 @@ package in.perpixl.movie.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.PersonEntity;
 import in.perpixl.movie.mapper.PersonMapper;
 import in.perpixl.movie.model.PersonDTO;
@@ -29,40 +30,32 @@ public class PersonServiceImpl implements ICRUDService<PersonDTO>{
 	
 	@Override
 	@Transactional
-	public void create(PersonDTO m) {
+	public Long create(PersonDTO m) {
 		PersonEntity entity = mapper.mapDtoToEntity(m);
-		personRepo.save(entity);
+		PersonEntity savedEntity = personRepo.save(entity);
+		return savedEntity.getPersonId();
 	}
 
 	@Override
-	public PersonDTO read(long personId) {
-		PersonEntity me=personRepo.findById(personId).orElseThrow(RuntimeException::new);
-		PersonDTO m=mapper.mapEntityToDto(me);
-		return m;
+	public PersonDTO read(Long id) {
+		PersonEntity me=personRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		return mapper.mapEntityToDto(me);
 	}
 
 	@Override
 	public void update(PersonDTO m) {
-		Optional<PersonEntity> entity=personRepo.findById(Long.parseLong(m.getPersonId().toString()));
-		if(entity.isPresent())
-		{
-			PersonEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			personRepo.save(ent);
-		}
+		PersonEntity entity=personRepo.findById(m.getPersonId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getPersonId())));
+		mapper.mapDtoToEntity(m, entity);
+		personRepo.save(entity);
 	}
 
 	@Override
-	public long delete(long personId) {
-		Optional<PersonEntity> entity=personRepo.findById(personId);
-		long rohit=0L;
-		if(entity.isPresent())
-		{
-			PersonEntity ent = entity.get();
-	
-			personRepo.delete(ent);
-		}
-		return rohit;
+	public void delete(Long id) {
+		PersonEntity entity=personRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		personRepo.delete(entity);
 	}
 
 	@Override

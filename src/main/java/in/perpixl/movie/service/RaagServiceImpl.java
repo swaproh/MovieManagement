@@ -3,13 +3,15 @@ package in.perpixl.movie.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.RaagEntity;
 import in.perpixl.movie.mapper.RaagMapper;
 import in.perpixl.movie.model.RaagDTO;
@@ -24,40 +26,32 @@ public class RaagServiceImpl implements ICRUDService<RaagDTO>{
 	private RaagMapper mapper;
 	
 	@Override
-	public void create(RaagDTO m) {
+	public Long create(RaagDTO m) {
 		RaagEntity entity = mapper.mapDtoToEntity(m);
-		repo.save(entity);
+		RaagEntity savedEntity = repo.save(entity);
+		return savedEntity.getId();
 	}
 
 	@Override
-	public RaagDTO read(long roleId) {
-		RaagEntity me=repo.findById(roleId).orElseThrow(RuntimeException::new);
-		RaagDTO m=mapper.mapEntityToDto(me);
-		return m;
+	public RaagDTO read(Long id) {
+		RaagEntity me=repo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		return mapper.mapEntityToDto(me);
 	}
 
 	@Override
 	public void update(RaagDTO m) {
-		Optional<RaagEntity> entity=repo.findById(Long.parseLong(m.getId().toString()));
-		if(entity.isPresent())
-		{
-			RaagEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			repo.save(ent);
-		}
+		RaagEntity entity=repo.findById(m.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getId())));
+		mapper.mapDtoToEntity(m, entity);
+		repo.save(entity);
 	}
 
 	@Override
-	public long delete(long roleId) {
-		Optional<RaagEntity> entity=repo.findById(roleId);
-		long rohit=0L;
-		if(entity.isPresent())
-		{
-			RaagEntity ent = entity.get();
-	
-			repo.delete(ent);
-		}
-		return rohit;
+	public void delete(Long id) {
+		RaagEntity entity=repo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		repo.delete(entity);
 	}
 
 	@Override

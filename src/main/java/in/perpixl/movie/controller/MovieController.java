@@ -2,8 +2,8 @@ package in.perpixl.movie.controller;
 
 import java.util.List;
 
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.service.ICRUDService;
 
@@ -67,11 +66,8 @@ public class MovieController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long movieId) {
-		long l = serviceI.delete(movieId);
-		System.out.println("delete movie controller");
-		return l;
-		
+	public void delete(@PathVariable(name="id") Long movieId) {
+		serviceI.delete(movieId);
 	}
 
 }

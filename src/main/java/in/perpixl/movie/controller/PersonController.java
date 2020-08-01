@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.perpixl.movie.model.MovieDTO;
 import in.perpixl.movie.model.PersonDTO;
 import in.perpixl.movie.service.ICRUDService;
 
@@ -61,9 +60,8 @@ public class PersonController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long personId) {
-		long l = serviceI.delete(personId);
-		return l;
+	public void delete(@PathVariable(name="id") Long personId) {
+		serviceI.delete(personId);
 	}
 
 }

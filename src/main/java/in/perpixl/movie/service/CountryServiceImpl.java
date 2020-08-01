@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.CountryEntity;
 import in.perpixl.movie.mapper.CountryMapper;
 import in.perpixl.movie.model.CountryDTO;
@@ -24,40 +27,40 @@ public class CountryServiceImpl implements ICRUDService<CountryDTO>{
 	private CountryMapper mapper;
 	
 	@Override
-	public void create(CountryDTO m) {
+	public Long create(CountryDTO m) {
 		CountryEntity entity = mapper.mapDtoToEntity(m);
-		countryRepo.save(entity);
+		CountryEntity savedEntity = countryRepo.save(entity);
+		return savedEntity.getId();
 	}
 
 	@Override
-	public CountryDTO read(long countryId) {
-		CountryEntity me=countryRepo.findById(countryId).orElseThrow(RuntimeException::new);
-		CountryDTO m=mapper.mapEntityToDto(me);
-		return m;
+	public CountryDTO read(Long id) {
+		CountryEntity me=countryRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		return mapper.mapEntityToDto(me);
 	}
 
 	@Override
 	public void update(CountryDTO m) {
-		Optional<CountryEntity> entity=countryRepo.findById(Long.parseLong(m.getId().toString()));
-		if(entity.isPresent())
-		{
-			CountryEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			countryRepo.save(ent);
-		}
+		CountryEntity entity=countryRepo.findById(m.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getId())));
+		mapper.mapDtoToEntity(m, entity);
+		countryRepo.save(entity);
 	}
 
 	@Override
-	public long delete(long countryId) {
-		Optional<CountryEntity> entity=countryRepo.findById(countryId);
-		long rohit=0L;
+	public void delete(Long id) {
+		Optional<CountryEntity> entity=countryRepo.findById(id);
 		if(entity.isPresent())
 		{
 			CountryEntity ent = entity.get();
 	
 			countryRepo.delete(ent);
+		}else
+		{
+			throw new EntityNotFoundException(
+					String.format(Constants.ENTITY_NOT_FOUND, id));
 		}
-		return rohit;
 	}
 
 	@Override

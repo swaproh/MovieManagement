@@ -3,13 +3,15 @@ package in.perpixl.movie.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.LanguageEntity;
 import in.perpixl.movie.mapper.LanguageMapper;
 import in.perpixl.movie.model.LanguageDTO;
@@ -24,40 +26,33 @@ public class LanguageServiceImpl implements ICRUDService<LanguageDTO>{
 	private LanguageMapper mapper;
 	
 	@Override
-	public void create(LanguageDTO m) {
+	public Long create(LanguageDTO m) {
 		LanguageEntity entity = mapper.mapDtoToEntity(m);
-		languageRepo.save(entity);
+		LanguageEntity savedEntity = languageRepo.save(entity);
+		return savedEntity.getId();
 	}
 
 	@Override
-	public LanguageDTO read(long languageId) {
-		LanguageEntity me=languageRepo.findById(languageId).orElseThrow(RuntimeException::new);
+	public LanguageDTO read(Long languageId) {
+		LanguageEntity me=languageRepo.findById(languageId)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, languageId)));
 		LanguageDTO m=mapper.mapEntityToDto(me);
 		return m;
 	}
 
 	@Override
 	public void update(LanguageDTO m) {
-		Optional<LanguageEntity> entity=languageRepo.findById(Long.parseLong(m.getId().toString()));
-		if(entity.isPresent())
-		{
-			LanguageEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			languageRepo.save(ent);
-		}
+		LanguageEntity entity=languageRepo.findById(m.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getId())));
+		mapper.mapDtoToEntity(m, entity);
+		languageRepo.save(entity);
 	}
 
 	@Override
-	public long delete(long languageId) {
-		Optional<LanguageEntity> entity=languageRepo.findById(languageId);
-		long rohit=0L;
-		if(entity.isPresent())
-		{
-			LanguageEntity ent = entity.get();
-	
-			languageRepo.delete(ent);
-		}
-		return rohit;
+	public void delete(Long id) {
+		LanguageEntity entity=languageRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		languageRepo.delete(entity);
 	}
 
 	@Override

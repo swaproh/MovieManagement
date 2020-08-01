@@ -61,9 +61,8 @@ public class CountryController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long countryId) {
-		long l = serviceI.delete(countryId);
-		return l;
+	public void delete(@PathVariable(name="id") Long countryId) {
+		serviceI.delete(countryId);
 	}
 
 }

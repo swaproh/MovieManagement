@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.CompanyEntity;
 import in.perpixl.movie.mapper.CompanyMapper;
 import in.perpixl.movie.model.CompanyDTO;
@@ -24,40 +27,32 @@ public class CompanyServiceImpl implements ICRUDService<CompanyDTO>{
 	private CompanyMapper mapper;
 	
 	@Override
-	public void create(CompanyDTO m) {
+	public Long create(CompanyDTO m) {
 		CompanyEntity entity = mapper.mapDtoToEntity(m);
-		companyRepo.save(entity);
+		CompanyEntity savedEntity = companyRepo.save(entity);
+		return savedEntity.getId();
 	}
 
 	@Override
-	public CompanyDTO read(long companyId) {
-		CompanyEntity me=companyRepo.findById(companyId).orElseThrow(RuntimeException::new);
-		CompanyDTO m=mapper.mapEntityToDto(me);
-		return m;
+	public CompanyDTO read(Long id) {
+		CompanyEntity me=companyRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		return mapper.mapEntityToDto(me);
 	}
 
 	@Override
 	public void update(CompanyDTO m) {
-		Optional<CompanyEntity> entity=companyRepo.findById(Long.parseLong(m.getId().toString()));
-		if(entity.isPresent())
-		{
-			CompanyEntity ent = entity.get();
-			mapper.mapDtoToEntity(m, ent);
-			companyRepo.save(ent);
-		}
+		CompanyEntity entity=companyRepo.findById(m.getId())
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, m.getId())));
+		mapper.mapDtoToEntity(m, entity);
+		companyRepo.save(entity);
 	}
 
 	@Override
-	public long delete(long companyId) {
-		Optional<CompanyEntity> entity=companyRepo.findById(companyId);
-		long rohit=0L;
-		if(entity.isPresent())
-		{
-			CompanyEntity ent = entity.get();
-	
-			companyRepo.delete(ent);
-		}
-		return rohit;
+	public void delete(Long id) {
+		CompanyEntity entity=companyRepo.findById(id)
+				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		companyRepo.delete(entity);
 	}
 
 	@Override

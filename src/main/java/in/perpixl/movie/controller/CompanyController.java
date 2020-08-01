@@ -17,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.perpixl.movie.model.CompanyDTO;
-import in.perpixl.movie.model.PersonDTO;
-import in.perpixl.movie.model.RoleDTO;
 import in.perpixl.movie.service.ICRUDService;
 
-@RestController(value="company")
+@RestController
 @RequestMapping("company")
 @CrossOrigin("*")
 public class CompanyController {
@@ -63,9 +61,8 @@ public class CompanyController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long companyId) {
-		long l = serviceI.delete(companyId);
-		return l;
+	public void delete(@PathVariable(name="id") Long companyId) {
+		serviceI.delete(companyId);
 	}
 
 }

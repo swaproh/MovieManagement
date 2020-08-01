@@ -61,9 +61,8 @@ public class RoleController {
 	}
 
 	@DeleteMapping("/delete/{id}")
-	public long delete(@PathVariable(name="id") long roleId) {
-		long l = serviceI.delete(roleId);
-		return l;
+	public void delete(@PathVariable(name="id") Long roleId) {
+		serviceI.delete(roleId);
 	}
 
 }
