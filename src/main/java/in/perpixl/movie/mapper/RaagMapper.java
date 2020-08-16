@@ -50,6 +50,7 @@ public class RaagMapper implements IMapper<RaagDTO,RaagEntity>{
 		t.setThaat(u.getThaat());
 		t.setVaadiSwar(u.getVaadiSwar());
 		t.setVarjyaSwar(u.getVarjyaSwar());
+		t.setGat(u.getGat());
 		t.setAalapi(swarSamuhMapper.mapEntityToDto(u.getAalapi()));
 		t.setTaana(swarSamuhMapper.mapEntityToDto(u.getTaana()));
 		t.setSwarVistar(swarSamuhMapper.mapEntityToDto(u.getSwarVistar()));
@@ -69,6 +70,7 @@ public class RaagMapper implements IMapper<RaagDTO,RaagEntity>{
 		u.setThaat(t.getThaat());
 		u.setVaadiSwar(t.getVaadiSwar());
 		u.setVarjyaSwar(t.getVarjyaSwar());
+		u.setGat(t.getGat());
 		u.setAalapi(swarSamuhMapper.mapDtoToEntity(t.getAalapi()));
 		u.setTaana(swarSamuhMapper.mapDtoToEntity(t.getTaana()));
 		u.setSwarVistar(swarSamuhMapper.mapDtoToEntity(t.getSwarVistar()));

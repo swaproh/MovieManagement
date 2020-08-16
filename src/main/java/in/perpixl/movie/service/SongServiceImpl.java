@@ -10,10 +10,14 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import in.perpixl.movie.constants.Constants;
 import in.perpixl.movie.entity.PersonEntity;
+import in.perpixl.movie.entity.RaagEntity;
 import in.perpixl.movie.entity.SongEntity;
 import in.perpixl.movie.entity.SongPersonRoleLinkEntity;
 import in.perpixl.movie.mapper.PersonMapper;
@@ -85,13 +89,15 @@ public class SongServiceImpl implements ICRUDService<SongDTO>{
 	public void delete(Long id) {
 		SongEntity entity=songRepo.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException(String.format(Constants.ENTITY_NOT_FOUND, id)));
+		entity.addRaag(null);
 		songRepo.delete(entity);
 	}
 
 	@Override
-	public List<SongDTO> readAll() {
-		List<SongEntity> SongEntityList=songRepo.findAll();
-		Set<SongDTO> SongDTOList=mapper.mapEntityListToDTOList(new HashSet<>(SongEntityList));
+	public List<SongDTO> readAll(Long pageNumber, Long pageSize) {
+		Pageable pageInfo = PageRequest.of(Integer.valueOf(pageNumber.toString()), Integer.valueOf(pageSize.toString()));
+		Page<SongEntity> songEntityPage=songRepo.findAll(pageInfo);
+		Set<SongDTO> SongDTOList=mapper.mapEntityListToDTOList(songEntityPage.toSet());
 		return new ArrayList<>(SongDTOList);
 	}
 

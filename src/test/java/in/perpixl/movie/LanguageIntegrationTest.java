@@ -38,14 +38,14 @@ public class LanguageIntegrationTest {
 	@Autowired
 	private LanguageRepository repository;
 
-	@Test
+	//@Test
 	public void checkInjectedDependencies() {
 		assertThat(mockMvc).isNotNull();
 		assertThat(objectMapper).isNotNull();
 		assertThat(repository).isNotNull();
 	}
 
-	@Test
+	//@Test
 	@DirtiesContext
 	public void saveLanguageTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -60,7 +60,7 @@ public class LanguageIntegrationTest {
 		assertThat(entity.getId()).isNotNull();
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void saveLanguageWithIdTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -78,7 +78,7 @@ public class LanguageIntegrationTest {
 		assertThat(entity.getId()).isNotSameAs(dto.getId());
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void updateLanguageTestIdNull() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -91,7 +91,7 @@ public class LanguageIntegrationTest {
 		.andExpect(status().isBadRequest());
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void updateLanguageTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -122,7 +122,7 @@ public class LanguageIntegrationTest {
 		assertThat(updatedentityOpt.get().getName()).isEqualTo(dtoUpdate.getName());
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void readLanguageTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -139,7 +139,7 @@ public class LanguageIntegrationTest {
 		assertThat(entity.getName()).isEqualTo(dto.getName());
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void readAllLanguageTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();
@@ -157,7 +157,7 @@ public class LanguageIntegrationTest {
 		assertThat(entitySet.get(0).getName()).isEqualTo(dto.getName());
 	}
 	
-	@Test
+	//@Test
 	@DirtiesContext
 	public void deleteLanguageTest() throws JsonProcessingException, Exception {
 		LanguageDTO dto = new LanguageDTO();

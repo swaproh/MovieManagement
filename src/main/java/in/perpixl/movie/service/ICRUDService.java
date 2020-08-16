@@ -8,5 +8,5 @@ public interface ICRUDService<T> {
 	public T read(Long id);
 	public void update(T m);
 	public void delete(Long id);
-	public List<T> readAll();
+	public List<T> readAll(Long pageNumber, Long pageSize);
 }

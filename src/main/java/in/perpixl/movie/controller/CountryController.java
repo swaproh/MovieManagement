@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.perpixl.movie.model.CountryDTO;
@@ -46,9 +47,12 @@ public class CountryController {
 	}
 	
 	@GetMapping("/readAll")
-	public ResponseEntity<List<CountryDTO>> readAll(){
+	public ResponseEntity<List<CountryDTO>> readAll(
+			@RequestParam(name="pageNumber", required=false) Long pageNumber,
+			@RequestParam(name="pageSize", required=false) Long pageSize
+			){
 		ResponseEntity<List<CountryDTO>> response = new ResponseEntity<List<CountryDTO>>(HttpStatus.OK);
-		List<CountryDTO> countryDTOList=serviceI.readAll();
+		List<CountryDTO> countryDTOList=serviceI.readAll(pageNumber,pageSize);
 		response = response.ok(countryDTOList);
 		return response;
 	}

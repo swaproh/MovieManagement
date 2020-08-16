@@ -64,7 +64,7 @@ public class CountryServiceImpl implements ICRUDService<CountryDTO>{
 	}
 
 	@Override
-	public List<CountryDTO> readAll() {
+	public List<CountryDTO> readAll(Long pageNumber, Long pageSize) {
 		List<CountryEntity> countryEntityList=countryRepo.findAll();
 		Set<CountryDTO> countryDTOList=mapper.mapEntityListToDTOList(new HashSet<>(countryEntityList));
 		return new ArrayList<>(countryDTOList);

@@ -33,6 +33,9 @@ public class RaagDTO {
 	
 	private String sandarbh;
 	
+	@SwarConstraint
+	private String gat;
+	
 	@Valid
 	private SwarSamuhDTO swarVistar;
 	
@@ -162,6 +165,12 @@ public class RaagDTO {
 				+ jaati + ", vaadiSwar=" + vaadiSwar + ", samvaadiSwar=" + samvaadiSwar + ", samay=" + samay
 				+ ", aaroh=" + aaroh + ", avroh=" + avroh + ", pakad=" + pakad + ", sandarbh=" + sandarbh
 				+ ", swarVistar=" + swarVistar + ", aalapi=" + aalapi + ", taana=" + taana + "]";
+	}
+	public String getGat() {
+		return gat;
+	}
+	public void setGat(String gat) {
+		this.gat = gat;
 	}
 	
 }

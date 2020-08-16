@@ -10,6 +10,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import in.perpixl.movie.constants.Constants;
@@ -117,9 +120,11 @@ public class MovieServiceImpl implements ICRUDService<MovieDTO>{
 	}
 
 	@Override
-	public List<MovieDTO> readAll() {
-		List<MovieEntity> movieEntityList=movieRepo.findAll();
-		Set<MovieDTO> movieDTOList=mapper.mapEntityListToDTOList(new HashSet<>(movieEntityList));
+	public List<MovieDTO> readAll(Long pageNumber, Long pageSize) {
+		// create page request
+		Pageable pageInfo = PageRequest.of(Integer.valueOf(pageNumber.toString()), Integer.valueOf(pageSize.toString()));
+		Page<MovieEntity> movieEntityPage=movieRepo.findAll(pageInfo);
+		Set<MovieDTO> movieDTOList=mapper.mapEntityListToDTOList(movieEntityPage.toSet());
 		return new ArrayList<>(movieDTOList);
 	}
 

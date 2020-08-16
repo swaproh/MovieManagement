@@ -37,6 +37,8 @@ public class SongPersonRoleLinkEntityMapper {
 		Set<PersonDTO> peSet = me.getPersonDTO();
 		for(PersonDTO pd: peSet)
 		{
+			if(pd.getPersonId()!=null)
+			{
 			SongPersonRoleLinkEntity link = new SongPersonRoleLinkEntity();
 			 link.setSong(entity);
 			 
@@ -61,6 +63,7 @@ public class SongPersonRoleLinkEntityMapper {
 				 }
 			 }
 			 mprLinkSet.add(link);
+			}
 		}
 		
 		return mprLinkSet;

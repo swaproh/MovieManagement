@@ -14,7 +14,7 @@ import org.springframework.boot.web.server.LocalServerPort;
  * Starts the application, listen for the connection and then send the Http request
  * and assert the response
  */
-@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 public class HttpRequestTest {
 	@LocalServerPort
 	private int port;
@@ -22,7 +22,7 @@ public class HttpRequestTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 	
-	@Test
+	//@Test
 	public void greetingShouldReturnDefaultMessage()
 	{
 		assertThat(this.restTemplate.getForObject("http://localhost:"+port+"/", 

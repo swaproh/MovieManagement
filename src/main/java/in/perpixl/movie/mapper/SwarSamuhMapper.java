@@ -14,8 +14,12 @@ public class SwarSamuhMapper implements IMapper<SwarSamuhDTO,SwarSamuhEntity>{
 
 	@Override
 	public SwarSamuhDTO mapEntityToDto(SwarSamuhEntity u) {
-		SwarSamuhDTO dto=new SwarSamuhDTO();
-		mapEntityToDto(dto, u);
+		SwarSamuhDTO dto =null;
+		if(u!=null) {
+			dto=new SwarSamuhDTO();
+			mapEntityToDto(dto, u);
+		}
+		
 		return dto;
 	}
 

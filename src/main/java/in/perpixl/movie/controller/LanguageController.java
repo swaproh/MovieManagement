@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -44,8 +45,11 @@ public class LanguageController {
 	}
 	
 	@GetMapping("/readAll")
-	public ResponseEntity<List<LanguageDTO>> readAll(){
-		List<LanguageDTO> languageDTOList=serviceI.readAll();
+	public ResponseEntity<List<LanguageDTO>> readAll(
+			@RequestParam(name="pageNumber", required=false) Long pageNumber,
+			@RequestParam(name="pageSize", required=false) Long pageSize
+			){
+		List<LanguageDTO> languageDTOList=serviceI.readAll(pageNumber,pageSize);
 		return ResponseEntity.ok(languageDTOList);
 	}
 

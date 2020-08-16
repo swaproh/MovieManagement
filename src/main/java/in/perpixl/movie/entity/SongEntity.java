@@ -31,7 +31,7 @@ public class SongEntity {
 	@OneToMany(mappedBy="song", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<SongPersonRoleLinkEntity> sprLink=new HashSet<>();
 	
-	@ManyToOne(cascade={CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToOne
 	private RaagEntity raag;
 	
 	@ManyToOne

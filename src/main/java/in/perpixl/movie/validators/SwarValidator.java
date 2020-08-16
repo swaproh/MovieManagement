@@ -22,7 +22,7 @@ public class SwarValidator implements ConstraintValidator<SwarConstraint, String
 	@Override
 	public boolean isValid(String swarData, ConstraintValidatorContext context) 
 	{
-		String[] swarDataSplit = swarData.split(" ");
+		String[] swarDataSplit = swarData.split("[\\n\\r\\s]+");
 		for(String swar: swarDataSplit)
 		{
 			if(!raagInfoService.getAllSwaras().contains(swar))

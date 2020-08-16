@@ -56,7 +56,7 @@ public class LanguageServiceImpl implements ICRUDService<LanguageDTO>{
 	}
 
 	@Override
-	public List<LanguageDTO> readAll() {
+	public List<LanguageDTO> readAll(Long pageNumber, Long pageSize) {
 		List<LanguageEntity> LanguageEntityList=languageRepo.findAll();
 		Set<LanguageDTO> LanguageDTOList=mapper.mapEntityListToDTOList(new HashSet<>(LanguageEntityList));
 		return new ArrayList<>(LanguageDTOList);

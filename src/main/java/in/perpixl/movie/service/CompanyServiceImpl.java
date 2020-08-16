@@ -56,7 +56,7 @@ public class CompanyServiceImpl implements ICRUDService<CompanyDTO>{
 	}
 
 	@Override
-	public List<CompanyDTO> readAll() {
+	public List<CompanyDTO> readAll(Long pageNumber, Long pageSize) {
 		List<CompanyEntity> companyEntityList=companyRepo.findAll();
 		Set<CompanyDTO> companyDTOList=mapper.mapEntityListToDTOList(new HashSet<>(companyEntityList));
 		return new ArrayList<>(companyDTOList);

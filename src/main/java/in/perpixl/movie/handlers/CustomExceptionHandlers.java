@@ -18,7 +18,7 @@ public class CustomExceptionHandlers
 	@ExceptionHandler(EntityNotFoundException.class)
 	protected ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException ex)
 	{
-		System.out.println("Exception Occured: "+ex.getMessage());
+		System.out.println("EntityNotFoundException Occured: "+ex.getMessage());
 		String bodyOfResponse = ex.getMessage();
 		return new ResponseEntity<Object>(bodyOfResponse, HttpStatus.BAD_REQUEST);
 	}
@@ -26,7 +26,15 @@ public class CustomExceptionHandlers
 	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
 	protected ResponseEntity<Object> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex)
 	{
-		System.out.println("Exception Occured: "+ex.getMessage());
+		System.out.println("InvalidDataAccessApiUsageException Occured: "+ex.getMessage());
+		String bodyOfResponse = ex.getMessage();
+		return new ResponseEntity<Object>(bodyOfResponse, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(RuntimeException.class)
+	protected ResponseEntity<Object> handleRuntimeException(RuntimeException ex)
+	{
+		System.out.println("RuntimeException Occured: "+ex.getMessage());
 		String bodyOfResponse = ex.getMessage();
 		return new ResponseEntity<Object>(bodyOfResponse, HttpStatus.BAD_REQUEST);
 	}

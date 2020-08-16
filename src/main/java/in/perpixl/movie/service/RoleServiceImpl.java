@@ -55,7 +55,7 @@ public class RoleServiceImpl implements ICRUDService<RoleDTO>{
 	}
 
 	@Override
-	public List<RoleDTO> readAll() {
+	public List<RoleDTO> readAll(Long pageNumber, Long pageSize) {
 		List<RoleEntity> roleEntityList=roleRepo.findAll();
 		Set<RoleDTO> roleDTOList=mapper.mapEntityListToDTOList(new HashSet<>(roleEntityList));
 		return new ArrayList<>(roleDTOList);

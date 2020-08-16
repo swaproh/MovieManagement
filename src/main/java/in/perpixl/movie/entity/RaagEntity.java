@@ -19,7 +19,7 @@ public class RaagEntity {
 	@GeneratedValue
 	private Long id;
 	private String name;
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="raag")
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE},mappedBy="raag")
 	private Set<SongEntity> songs =new HashSet<>();
 	
 	private String thaat;        
@@ -32,6 +32,14 @@ public class RaagEntity {
 	private String avroh;        
 	private String pakad;        
 	private String sandarbh; 
+	private String gat;
+	
+	public String getGat() {
+		return gat;
+	}
+	public void setGat(String gat) {
+		this.gat = gat;
+	}
 	@Embedded
     @AttributeOverrides({
             @AttributeOverride(name="sthayi", 
@@ -139,7 +147,7 @@ public class RaagEntity {
 		this.taana = taana;
 	}
 	public Set<SongEntity> getSongs() {
-		return songs;
+		return new HashSet<>(songs);
 	}
 	public void addSong(SongEntity song) {
 		// prevent endless loop
@@ -162,7 +170,7 @@ public class RaagEntity {
 		this.songs.remove(song);
 		
 		// remove myself from this song
-		song.addRaag(this);
+		song.addRaag(null);
 	}
 	
 	public Long getId() {
